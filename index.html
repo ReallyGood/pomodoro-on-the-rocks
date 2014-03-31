@@ -74,15 +74,27 @@
     </div>
 
     <!-- http://soundbible.com/1426-Class-Bell.html by John Sauter, Sampling Plus 1.0 License -->
-    <audio id="temple" preload>
+    <audio id="audio-temple" preload>
         <source src="sounds/temple-bell.mp3" type="audio/mp3">
         <source src="sounds/temple-bell.ogg" type="audio/ogg">
     </audio>
 
     <!-- http://soundbible.com/1477-Zen-Temple-Bell.html by Mike Koenig, Attribution 3.0 License -->
-    <audio id="bell" preload>
+    <audio id="audio-bell" preload>
         <source src="sounds/bell.mp3" type="audio/mp3">
         <source src="sounds/bell.ogg" type="audio/ogg">
+    </audio>
+
+    <!-- http://soundbible.com/772-Button.html by Mike Koenig, Attribution 3.0 License -->
+    <audio id="audio-button" preload>
+        <source src="sounds/button.mp3" type="audio/mp3">
+        <source src="sounds/button.ogg" type="audio/ogg">
+    </audio>
+
+    <!-- http://soundbible.com/1138-Twitch.html by Mike Koenig, Attribution 3.0 License -->
+    <audio id="audio-twitch" preload>
+        <source src="sounds/twitch.mp3" type="audio/mp3">
+        <source src="sounds/twitch.ogg" type="audio/ogg">
     </audio>
 
 
@@ -155,8 +167,13 @@
     var message = document.getElementById("message");
     var sessionNumber = document.getElementById("sessionNumber");
     var task = document.getElementById("taskName");
-    var soundTemple = document.getElementById("temple");
-    var soundBell = document.getElementById("bell");
+
+    var sounds = {
+        temple: document.getElementById("audio-temple"),
+        bell: document.getElementById("audio-bell"),
+        button: document.getElementById("audio-button"),
+        twitch: document.getElementById("audio-twitch")
+    };
 
     // register start button
     var start = document.getElementById("start");
@@ -244,6 +261,8 @@
         // show message
         showMessage("normal");
 
+        playSound("click");
+
         // show stop button
         start.style.display = "none";
         stop.style.display = "block";
@@ -253,6 +272,8 @@
     function stopTimer(eventInfo) {
         // change message
         showMessage("quit");
+
+        playSound("click");
 
         // stop timer
         clearInterval(countdownID);
@@ -282,7 +303,13 @@
         showMessage("end");
 
         // play sound
-        playSound("end");
+        if(typeof eventInfo == 'object') {
+            // manually clicked reset
+            playSound("reset");
+        } else {
+            // timer has reached zero
+            playSound("end");
+        }
 
         // show start button
         start.style.display = "block";
@@ -317,10 +344,21 @@
     function playSound(soundType) {
         switch (soundType) {
             case "end":
-                soundTemple.play();
+                sounds.bell.play();
                 break;
+
             case "cooldown":
-                soundBell.play();
+                sounds.temple.play();
+                break;
+
+            case "reset":
+                sounds.button.volume = 0.5;
+                sounds.twitch.play();
+                break;
+
+            case "click":
+                sounds.button.volume = 0.2;
+                sounds.button.play();
                 break;
         }
     }
