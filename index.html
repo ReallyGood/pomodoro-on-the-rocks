@@ -73,11 +73,24 @@
         </div>
     </div>
 
+    <!-- http://soundbible.com/1426-Class-Bell.html by John Sauter, Sampling Plus 1.0 License -->
+    <audio id="temple" preload>
+        <source src="sounds/temple-bell.mp3" type="audio/mp3">
+        <source src="sounds/temple-bell.ogg" type="audio/ogg">
+    </audio>
+
+    <!-- http://soundbible.com/1477-Zen-Temple-Bell.html by Mike Koenig, Attribution 3.0 License -->
+    <audio id="bell" preload>
+        <source src="sounds/bell.mp3" type="audio/mp3">
+        <source src="sounds/bell.ogg" type="audio/ogg">
+    </audio>
+
+
 <script>
 (function () {
 
     // register variables
-    var bigTime = 1499; // time in seconds
+    window.bigTime = 1499; // time in seconds
     var mode = "normal"; // normal vs cooldown
     var animation = "fadeToBlack"; // will be able to change in settings later
 
@@ -142,6 +155,8 @@
     var message = document.getElementById("message");
     var sessionNumber = document.getElementById("sessionNumber");
     var task = document.getElementById("taskName");
+    var soundTemple = document.getElementById("temple");
+    var soundBell = document.getElementById("bell");
 
     // register start button
     var start = document.getElementById("start");
@@ -205,6 +220,7 @@
 
                 // change message
                 showMessage("cooldown");
+                playSound("cooldown");
             } else {
 
                 resetTimer();
@@ -265,6 +281,9 @@
         // change message
         showMessage("end");
 
+        // play sound
+        playSound("end");
+
         // show start button
         start.style.display = "block";
         stop.style.display = "none";
@@ -275,6 +294,7 @@
     }
 
     function showMessage(messageType) {
+        console.log('Switching to state', messageType);
         switch (messageType) {
             case "normal":
                 message.innerHTML = normalMessages[Math.floor(Math.random() * normalMessages.length)];
@@ -290,6 +310,17 @@
 
             case "quit":
                 message.innerHTML = quitMessages[Math.floor(Math.random() * quitMessages.length)];
+                break;
+        }
+    }
+
+    function playSound(soundType) {
+        switch (soundType) {
+            case "end":
+                soundTemple.play();
+                break;
+            case "cooldown":
+                soundBell.play();
                 break;
         }
     }
